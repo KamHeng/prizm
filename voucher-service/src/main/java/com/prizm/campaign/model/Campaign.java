@@ -20,6 +20,10 @@ public class Campaign {
     @Column(name = "remaining_stock")
     private int remainingStock;
 
+    // Maximum vouchers a single user may redeem from this campaign.
+    @Column(name = "max_per_user")
+    private int maxPerUser;
+
     private boolean active;
 
     public Long getId() { return id; }
@@ -32,6 +36,8 @@ public class Campaign {
     public void setTotalStock(int totalStock) { this.totalStock = totalStock; }
     public int getRemainingStock() { return remainingStock; }
     public void setRemainingStock(int remainingStock) { this.remainingStock = remainingStock; }
+    public int getMaxPerUser() { return maxPerUser; }
+    public void setMaxPerUser(int maxPerUser) { this.maxPerUser = maxPerUser; }
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
 }

@@ -1,6 +1,8 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:campaigndb;DB_CLOSE_DELAY=-1
+    # LOCK_TIMEOUT gives the pessimistic row locks taken during redemption room
+    # to queue under contention instead of failing fast on the 1s H2 default.
+    url: jdbc:h2:mem:campaigndb;DB_CLOSE_DELAY=-1;LOCK_TIMEOUT=10000
     username: sa
     password:
   jpa:
