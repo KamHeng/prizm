@@ -11,7 +11,33 @@ spring:
     show-sql: false
   sql:
     init:
-      mode: always
+      # Never. The schema belongs to Flyway (db/migration), and the old
+      # schema.sql began with DROP TABLE — with mode=always that ran against ANY
+      # datasource, not just embedded ones. Sample data is opt-in via the `dev`
+      # profile.
+      mode: never
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+audit:
+  url: ${AUDIT_URL:http://internal-audit.prizm.local/api/v2/events}
+  # Deliberately defaulted to EMPTY, not left as a bare ${AUDIT_API_KEY}.
+  # Spring's binder leaves an unresolvable placeholder as the literal text
+  # "${AUDIT_API_KEY}", which is non-blank — so @NotBlank would pass and the
+  # service would post that literal string as its credential. An empty default
+  # resolves cleanly and lets validation reject it. See .env.example.
+  api-key: ${AUDIT_API_KEY:}
+  connect-timeout: 2s
+  read-timeout: 3s
+
+app:
+  security:
+    jwt:
+      # HS256 shared secret, minimum 32 bytes. Empty default for the same reason
+      # as above; SecurityConfig rejects blank and short values explicitly.
+      # See the README for swapping this for an identity provider's JWKS.
+      secret: ${JWT_SECRET:}
 
 server:
   port: 8080

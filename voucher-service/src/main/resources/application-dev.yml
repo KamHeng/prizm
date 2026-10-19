@@ -1,0 +1,10 @@
+# Local development only: loads the sample campaigns and vouchers once Flyway
+# has created the schema. Activate with --spring.profiles.active=dev.
+#
+# Only data-locations is set; Flyway still owns the DDL, so nothing here can
+# drop or recreate a table.
+spring:
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:dev-seed.sql

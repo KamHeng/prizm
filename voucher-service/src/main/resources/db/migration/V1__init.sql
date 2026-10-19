@@ -1,6 +1,9 @@
-DROP TABLE IF EXISTS redemption;
-DROP TABLE IF EXISTS voucher;
-DROP TABLE IF EXISTS campaign;
+-- Baseline schema. Flyway owns the schema from here on: add a V2__*.sql rather
+-- than editing this file, which is checksummed once applied.
+--
+-- There are deliberately no DROP statements. The previous schema.sql dropped
+-- all three tables on every startup, which was harmless only because the
+-- datasource was in-memory.
 
 CREATE TABLE campaign (
     id              BIGINT PRIMARY KEY,

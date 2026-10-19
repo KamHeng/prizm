@@ -3,3 +3,7 @@ build/
 *.class
 .idea/
 *.iml
+
+# Local secrets. .env.example is committed as the template.
+.env
+.env.local

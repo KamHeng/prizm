@@ -1,3 +1,10 @@
+-- Sample data for local development and for the test suite. INSERTs only: it
+-- creates no schema and drops nothing, so it cannot destroy data.
+--
+-- This never runs unless something asks for it: the default profile sets
+-- spring.sql.init.mode=never, the `dev` profile points data-locations here, and
+-- the tests load it through @Sql. It is packaged in the jar but inert.
+
 INSERT INTO campaign (id, name, client_code, total_stock, remaining_stock, max_per_user, active) VALUES
   (1, 'Raya Flash Deal', 'ACME', 100, 100, 2, TRUE),
   (2, 'Merdeka Giveaway', 'NOVA', 50, 50, 2, TRUE),
@@ -15,6 +22,12 @@ INSERT INTO campaign (id, name, client_code, total_stock, remaining_stock, max_p
 -- column's DEFAULT 2 rather than an explicit value.
 INSERT INTO campaign (id, name, client_code, total_stock, remaining_stock, active) VALUES
   (8, 'Default Limit Campaign', 'ZETA', 4, 4, TRUE);
+
+-- One unit of stock but several live codes, so a burst of distinct users racing
+-- for it must yield exactly one winner. Separate client code to keep it out of
+-- the ZETA stats fixtures.
+INSERT INTO campaign (id, name, client_code, total_stock, remaining_stock, max_per_user, active) VALUES
+  (9, 'Last One Left Campaign', 'OMNI', 1, 1, 2, TRUE);
 
 INSERT INTO voucher (id, campaign_id, code, status, redeemed_by, redeemed_at) VALUES
   (1, 1, 'RAYA-0001', 'ACTIVE',   NULL,      NULL),
@@ -73,6 +86,15 @@ INSERT INTO voucher (id, campaign_id, code, status, redeemed_by, redeemed_at) VA
   (42, 8, 'DFLT-0001', 'ACTIVE', NULL, NULL),
   (43, 8, 'DFLT-0002', 'ACTIVE', NULL, NULL),
   (44, 8, 'DFLT-0003', 'ACTIVE', NULL, NULL);
+
+-- Campaign 9: six live codes, one unit of stock.
+INSERT INTO voucher (id, campaign_id, code, status, redeemed_by, redeemed_at) VALUES
+  (45, 9, 'OVER-0001', 'ACTIVE', NULL, NULL),
+  (46, 9, 'OVER-0002', 'ACTIVE', NULL, NULL),
+  (47, 9, 'OVER-0003', 'ACTIVE', NULL, NULL),
+  (48, 9, 'OVER-0004', 'ACTIVE', NULL, NULL),
+  (49, 9, 'OVER-0005', 'ACTIVE', NULL, NULL),
+  (50, 9, 'OVER-0006', 'ACTIVE', NULL, NULL);
 
 -- user-99 has two log rows on campaign 1, but voucher 5 was later voided, so
 -- only one of them counts toward the limit.

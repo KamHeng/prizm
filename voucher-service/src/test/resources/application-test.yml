@@ -1,0 +1,22 @@
+# Test-only credentials. A profile-specific file so it MERGES over
+# application.yml rather than shadowing it — naming this application.yml would
+# replace the datasource and Flyway settings instead of adding to them.
+#
+# These override the ${AUDIT_API_KEY} / ${JWT_SECRET} placeholders, so the suite
+# runs without environment variables while the real application still refuses to
+# start without them.
+audit:
+  api-key: test-only-key-not-a-real-credential
+
+app:
+  security:
+    jwt:
+      secret: test-only-jwt-secret-at-least-32-bytes-long
+
+spring:
+  jpa:
+    properties:
+      # Lets the stats tests assert how many queries ran, which is the only way
+      # to prove an N+1 is gone rather than merely that the output looks right.
+      hibernate:
+        generate_statistics: true
